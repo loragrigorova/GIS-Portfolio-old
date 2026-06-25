@@ -11,6 +11,91 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			/* Fullscreen modal styles */
+			.modal {
+				display: none;
+				position: fixed;
+				z-index: 1000;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.9);
+				animation: fadeIn 0.3s;
+			}
+
+			@keyframes fadeIn {
+				from { opacity: 0; }
+				to { opacity: 1; }
+			}
+
+			.modal-content {
+				position: relative;
+				margin: auto;
+				width: 90%;
+				height: 90%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				animation: slideIn 0.3s;
+			}
+
+			@keyframes slideIn {
+				from { transform: scale(0.8); opacity: 0; }
+				to { transform: scale(1); opacity: 1; }
+			}
+
+			.modal-content img {
+				max-width: 100%;
+				max-height: 100%;
+				object-fit: contain;
+			}
+
+			.close-modal {
+				position: absolute;
+				top: 30px;
+				right: 40px;
+				color: #f1f1f1;
+				font-size: 40px;
+				font-weight: bold;
+				cursor: pointer;
+				z-index: 1001;
+				transition: color 0.3s;
+			}
+
+			.close-modal:hover {
+				color: #bbb;
+			}
+
+			.image-container {
+				position: relative;
+				display: inline-block;
+			}
+
+			.expand-btn {
+				position: absolute;
+				bottom: 10px;
+				right: 10px;
+				background-color: rgba(0, 0, 0, 0.6);
+				color: white;
+				border: none;
+				padding: 10px 15px;
+				border-radius: 4px;
+				cursor: pointer;
+				font-size: 14px;
+				transition: background-color 0.3s;
+				opacity: 0;
+			}
+
+			.image-container:hover .expand-btn {
+				opacity: 1;
+			}
+
+			.expand-btn:hover {
+				background-color: rgba(0, 0, 0, 0.9);
+			}
+		</style>
 	</head>
 	<body class="is-preload">
 
@@ -47,14 +132,17 @@
 									<h1>Vector Isochrone Map</h1>
 									<p>A vector map with an isochrone polygon depicting the driving times to hospitals in Rotterdam Zuid</p>
 								</header>
-								<div class="image main"><img src="images/pic03.png" alt="" /></div>
+								<div class="image main image-container">
+									<img src="images/pic03.png" alt="Vector Isochrone Map" />
+									<button class="expand-btn" id="expandBtn">🔍 View Fullscreen</button>
+								</div>
 								
 								<h2>Overview</h2> .</p>
-                                <p>This vector map uses an isochrone to investigate how long it takes to drive to the nearest hospital from the area of Rotterdam Zuid. A vector map uses mathematical equations (points, lines and polygons) to depict geographic data, rather than pixels. These equations describe the location and shape of every mapped element, allowing us to use the data they depict to measure distances, plan routes and identify large-scale patterns in an area. An isochrone map, on the other hand, depicts how accessible a specific point on the map is within a certain interval of time. While isochrone maps have been used since the 19th century, in a modern-day vector map, isochrones are represented as polygons whose boundaries are defined by the locations that can be reached within a defined travel internal from a specific starting point. Thus, this map depicts how access to hospital facilities varies across the Zuid area of Rotterdam: Charlois, Ijsselmonde and other surrounding neighbourhoods.</p>
+                                <p>This vector map uses an isochrone to investigate how long it takes to drive to the nearest hospital from the area of Rotterdam Zuid. A vector map uses mathematical e[...]
 								<h2>Methods</h2>
-								<p>Rotterdam Zuid is an area that lies south of the <i>Nieuwe Maas river</i>  and is home to roughly 200 000 residents. I specifically chose it due to its reputation as a more “run-down” area of the country (a relatively rare status to have in the Netherlands), as its residents have historically had lower average incomes, higher unemployment rates and a lower life expectancy than the national average. Still, the area has been the subject of concentrated renewal projects aimed at improving housing quality and public service. This thus makes it a useful case to measure whether hospitals, an undeniably essential public service, are becoming more accessible to its residents. In order to investigate this, I used QGIS and data from Open Street Map. First, I downloaded all residential points in the Rotterdam Zuid area and part of the area across the river from Open Street Map data. Afterwards, I ran the same process in the database but for hospitals. Using this data, I generated isochrones that depict a driving distance of 5, 10 and 20 minutes from the hospitals in the area. The buildings, which were initially depicted as polygons (thereby closer to how they would look in real life from a satellite), were then converted into centroid points, so that a reader can easily count how many were located within each distance radius. </p>
+								<p>Rotterdam Zuid is an area that lies south of the <i>Nieuwe Maas river</i>  and is home to roughly 200 000 residents. I specifically chose it due to its reputation as a more "run-down" a[...]
 								<h2>Results</h2>
-								<p>Overwhelmingly, many of the residential buildings in Rotterdam Zuid are within a 20 minute drive from/to the nearest hospital. Most hospital facilities were concentrated to the north of the neighbourhood, across the river, nearing the center of Rotterdam. Still, it’s important to note that all residents of Charlois were within a 10 minute drive of a hospital. It is also important to note that the data I have used here may not be entirely accurate: upon further investigation of the area, I found that there are two healthcare facilities, Ikazia Hospital and Maasstad Hospital that, for an unknow to me reason, failed to generate an isochrone layer. I am not sure whether this was an error on my part or an error in the Open Street Map data collection. Still, even keeping those two hospitals in mind, there is still room for improvement in regards to making hospitals more accessible for the residents of Rotterdam Zuid (particularly those who lack cars).</p>
+								<p>Overwhelmingly, many of the residential buildings in Rotterdam Zuid are within a 20 minute drive from/to the nearest hospital. Most hospital facilities were concentrated to the north of the[...]
 
 								<h2>Reflection</h2>
 								<p></p>
@@ -118,6 +206,14 @@
 
 				</div>
 
+			<!-- Image Modal -->
+				<div id="imageModal" class="modal">
+					<div class="modal-content">
+						<span class="close-modal">&times;</span>
+						<img id="modalImage" src="" alt="Fullscreen Map" />
+					</div>
+				</div>
+
 			<!-- Scripts -->
 					<script src="assets/js/jquery.min.js"></script>
 					<script src="assets/js/jquery.scrollex.min.js"></script>
@@ -126,6 +222,44 @@
 					<script src="assets/js/breakpoints.min.js"></script>
 					<script src="assets/js/util.js"></script>
 					<script src="assets/js/main.js"></script>
+
+					<script>
+						// Fullscreen modal functionality
+						const modal = document.getElementById('imageModal');
+						const expandBtn = document.getElementById('expandBtn');
+						const closeBtn = document.querySelector('.close-modal');
+						const modalImage = document.getElementById('modalImage');
+						const mainImage = document.querySelector('.image main img');
+
+						// Open modal
+						expandBtn.addEventListener('click', function() {
+							modal.style.display = 'block';
+							modalImage.src = mainImage.src;
+							document.body.style.overflow = 'hidden';
+						});
+
+						// Close modal
+						closeBtn.addEventListener('click', function() {
+							modal.style.display = 'none';
+							document.body.style.overflow = 'auto';
+						});
+
+						// Close modal when clicking outside the image
+						modal.addEventListener('click', function(event) {
+							if (event.target === modal) {
+								modal.style.display = 'none';
+								document.body.style.overflow = 'auto';
+							}
+						});
+
+						// Close modal with Escape key
+						document.addEventListener('keydown', function(event) {
+							if (event.key === 'Escape' && modal.style.display === 'block') {
+								modal.style.display = 'none';
+								document.body.style.overflow = 'auto';
+							}
+						});
+					</script>
 
 			</body>
 </html>
