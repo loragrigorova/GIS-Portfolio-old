@@ -11,6 +11,32 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+		/* Simple gallery and lightbox styles */
+		.gallery {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+			margin-top: 1.5rem;
+		}
+		.gallery a { display: inline-block; width: calc(33.333% - 0.66rem); }
+		.gallery img { width: 100%; height: auto; display: block; border-radius: 4px; }
+		/* Lightbox */
+		#lightbox {
+			display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+			background: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 1rem;
+		}
+		#lightbox.active { display: flex; }
+		.lightbox-inner { max-width: 95%; max-height: 95%; text-align: center; }
+		.lightbox-img { max-width: 100%; max-height: 80vh; border-radius: 4px; }
+		.lightbox-caption { margin-top: 0.5rem; color: #fff; }
+		.lightbox-close {
+			position: absolute; right: 1rem; top: 1rem; color: #fff; font-size: 2rem; cursor: pointer;
+		}
+		@media (max-width: 600px) {
+			.gallery a { width: 100%; }
+		}
+		</style>
 	</head>
 	<body class="is-preload">
 
@@ -50,12 +76,18 @@
 								</header>
 								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>
 								<h2>Overview</h2>
-								A digital elevation model is a 3D graphic representation of elevation, used to depict the terrain of a certain area. For this assignment, we had to create two types of DEM: a digital surface model (DSM), which represents every element on the surface (buildings, trees, etc) and a digital terrain model (DTM), which represents only the ground surface of a chosen area, without any possible roofs and canopies. The goal of the assignment was to use contemporary LIDAR data (from which DEMs are constructed) to make a comparison with a 19th century map of the area, which would let us trace how the landscape has changed over the years. We focused on the Netherlands for this assignment, due to it having one of the highest density LiDAR databases in the world. For this assignment, I chose to investigate the river Tongelreep and surrounding areas in Noord-Brabant has shifted over the years. The map I have chosen for this project is a map of the Noord-Brabant region made in 1841, according to the surveys of the cadastral register. It was produced under the direction of L. van der Voordt Pieck and M. Kuijl, and drawn by A.B. van Lieshout. The river Tongelreep is a small tributary of the river Dommel that flows through Belgium and the Netherlands. While it is mostly free-flowing, it has been altered by humans to an extent: the stretch to the west of Leenderbos was canaled in 1890 for the creation of fishing ponds, as well as to the south of that area, where it was canaled by monks from the St. Bernadus Abbey in Achel, Belgium. It is interesting to note that agricultural activities at the Achel Abbey stopped in 1989, and efforts have been made to restore the natural flow of the river since then.
+								A digital elevation model is a 3D graphic representation of elevation, used to depict the terrain of a certain area. For this assignment, we had to create two types of DEM: a digital surfa[...]
 								<h2>Methods</h2>
-								These maps were produced first by choosing a 19th century map from the OldMapsOnline database and narrowing in on the area which I wanted to explore further, namely the Tongelreep. Having picked out an area of interest, I then located the very same area in present day in QGIS using OpenStreetMap. Afterwards, I downloaded the corresponding DTM and DSM files, which presented a fascinating almost-“cross-cut” look into the area. Now that I had all necessary components of my model, I overlaid them as different layers to reveal the change the area had underwent in the past (roughly) 200 years. In total, I created three maps: a digital terrain model, a digital surface model and a digital terrain model overlaid with the 19th century map, allowing us to trace if and how the river has diverged and whether surrounding areas have also undergone significant changes. The total size of the area I inspected was roughly between 2 and 5 km.
+								These maps were produced first by choosing a 19th century map from the OldMapsOnline database and narrowing in on the area which I wanted to explore further, namely the Tongelreep. Having [...]
 								<h2>Results</h2>
-								When overlaid with the 1841 map, we can see that the river has diverged somewhat in the present day, although not to an extent that would significantly change the landscape. Interestingly, I found more divergence within the northern part of the river, whereas I expected more to be found further down south, due to the canals made by the Achel Abbey monks. The map cuts off almost exactly where the fishing ponds were created, an area which would have been very interesting to compare. It would also be interesting to explore how the river has changed even further downwards, in the Achel area, if such data exists.
+								When overlaid with the 1841 map, we can see that the river has diverged somewhat in the present day, although not to an extent that would significantly change the landscape. Interestingly,[...]
 								<h2>Reflection</h2>
+								<p>Below are additional images related to this project. Click any image to expand it.</p>
+								<div class="gallery">
+									<a href="images/pic02.jpg" data-caption="View 1"><img src="images/pic02.jpg" alt="View 1" /></a>
+									<a href="images/pic03.jpg" data-caption="View 2"><img src="images/pic03.jpg" alt="View 2" /></a>
+									<a href="images/pic04.jpg" data-caption="View 3"><img src="images/pic04.jpg" alt="View 3" /></a>
+								</div>
 							</section>
 
 					</div>
@@ -116,7 +148,54 @@
 
 			</div>
 
+			<!-- Lightbox markup -->
+			<div id="lightbox" aria-hidden="true">
+				<button class="lightbox-close" aria-label="Close">&times;</button>
+				<div class="lightbox-inner">
+					<img class="lightbox-img" src="" alt="" />
+					<div class="lightbox-caption"></div>
+				</div>
+			</div>
+
 		<!-- Scripts -->
+			<script>
+			// Simple lightbox script
+			(function(){
+				var lightbox = document.getElementById('lightbox');
+				var lightboxImg = lightbox.querySelector('.lightbox-img');
+				var caption = lightbox.querySelector('.lightbox-caption');
+				var closeBtn = lightbox.querySelector('.lightbox-close');
+				function openLightbox(src, alt){
+					lightboxImg.src = src;
+					lightboxImg.alt = alt || '';
+					caption.textContent = alt || '';
+					lightbox.classList.add('active');
+					lightbox.setAttribute('aria-hidden','false');
+				}
+				function closeLightbox(){
+					lightbox.classList.remove('active');
+					lightbox.setAttribute('aria-hidden','true');
+					lightboxImg.src = '';
+					caption.textContent = '';
+				}
+				// Attach click handlers to gallery links
+				var links = document.querySelectorAll('.gallery a');
+				Array.prototype.forEach.call(links, function(link){
+					link.addEventListener('click', function(e){
+						e.preventDefault();
+						var src = link.getAttribute('href');
+						var cap = link.getAttribute('data-caption') || link.querySelector('img').alt || '';
+						openLightbox(src, cap);
+					});
+				});
+				// Close handlers
+				closeBtn.addEventListener('click', closeLightbox);
+				lightbox.addEventListener('click', function(e){ if(e.target === lightbox) closeLightbox(); });
+				// Close on Esc
+				document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLightbox(); });
+			})();
+			</script>
+
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrollex.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
