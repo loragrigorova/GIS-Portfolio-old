@@ -47,8 +47,10 @@
 			}
 
 			.modal-content img {
-				max-width: 100%;
-				max-height: 100%;
+				max-width: 90vw;
+				max-height: 90vh;
+				width: auto;
+				height: auto;
 				object-fit: contain;
 			}
 
@@ -138,11 +140,11 @@
 								</div>
 								
 								<h2>Overview</h2> .</p>
-                                <p>This vector map uses an isochrone to investigate how long it takes to drive to the nearest hospital from the area of Rotterdam Zuid. A vector map uses mathematical e[...]
+                                <p>This vector map uses an isochrone to investigate how long it takes to drive to the nearest hospital from the area of Rotterdam Zuid. A vector map uses mathemati[...]
 								<h2>Methods</h2>
-								<p>Rotterdam Zuid is an area that lies south of the <i>Nieuwe Maas river</i>  and is home to roughly 200 000 residents. I specifically chose it due to its reputation as a more "run-down" a[...]
+								<p>Rotterdam Zuid is an area that lies south of the <i>Nieuwe Maas river</i>  and is home to roughly 200 000 residents. I specifically chose it due to its reputation as a more "run-down" [...]
 								<h2>Results</h2>
-								<p>Overwhelmingly, many of the residential buildings in Rotterdam Zuid are within a 20 minute drive from/to the nearest hospital. Most hospital facilities were concentrated to the north of the[...]
+								<p>Overwhelmingly, many of the residential buildings in Rotterdam Zuid are within a 20 minute drive from/to the nearest hospital. Most hospital facilities were concentrated to the north o[...]
 
 								<h2>Reflection</h2>
 								<p></p>
@@ -235,6 +237,15 @@
 						expandBtn.addEventListener('click', function() {
 							modal.style.display = 'block';
 							modalImage.src = mainImage.src;
+							
+							// Debug: check if image loads
+							modalImage.onload = function() {
+								console.log('Image loaded successfully');
+							};
+							modalImage.onerror = function() {
+								console.error('Failed to load image:', modalImage.src);
+							};
+							
 							document.body.style.overflow = 'hidden';
 						});
 
