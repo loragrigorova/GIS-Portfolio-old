@@ -6,11 +6,62 @@
 -->
 <html>
 	<head>
-		<title>Generic Page - Massively by HTML5 UP</title>
+		<title>Vegetation Indices - GIS Portfolio</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		
+		<!-- Leaflet CSS -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+		
+		<style>
+			#map {
+				height: 600px;
+				margin: 20px 0;
+				border-radius: 8px;
+				z-index: 1;
+			}
+
+			.controls {
+				position: absolute;
+				top: 10px;
+				left: 10px;
+				z-index: 1000;
+				background: white;
+				padding: 15px;
+				border-radius: 6px;
+				font-family: sans-serif;
+				box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+			}
+
+			.controls label {
+				display: block;
+				margin-bottom: 8px;
+				cursor: pointer;
+			}
+
+			.controls input[type="checkbox"] {
+				margin-right: 8px;
+			}
+
+			#swipeBtn {
+				width: 100%;
+				padding: 10px;
+				margin-top: 10px;
+				background-color: #49bf9d;
+				color: white;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				font-weight: bold;
+				transition: background-color 0.3s;
+			}
+
+			#swipeBtn:hover {
+				background-color: #3da88a;
+			}
+		</style>
 	</head>
 	<body class="is-preload">
 
@@ -25,8 +76,8 @@
 				<!-- Nav -->
 					<nav id="nav">
 						<ul class="links">
-							<li class="active"><a href="generic.html">About</a></li>
-							<li><a href="index.html">My Projects</a></li>
+							<li><a href="generic.html">About</a></li>
+							<li class="active"><a href="index.html">My Projects</a></li>
 						</ul>
 						<ul class="icons">
 							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
@@ -42,16 +93,33 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<span class="date">April 25, 2017</span>
-									<h1>This is a<br />
-									Generic Page</h1>
-									<p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />
-									facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />
-									amet nullam sed etiam veroeros.</p>
+									<h1>Vegetation Indices Analysis</h1>
+									<p>Compare NDVI (Normalized Difference Vegetation Index) changes from 2017 to 2025 in the Congo region.</p>
 								</header>
-								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>
-								<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur sapien risus, commodo eget turpis at, elementum convallis enim turpis, lorem ipsum dolor sit amet nullam.</p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus. Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum.</p>
+								
+								<!-- Leaflet Map Container -->
+								<div id="map"></div>
+								
+								<!-- Map Controls -->
+								<div class="controls">
+									<label><input type="checkbox" id="img1" checked> 2017 Mean NDVI</label>
+									<label><input type="checkbox" id="img2"> 2017 True Color</label>
+									<label><input type="checkbox" id="img3" checked> 2025 Mean NDVI</label>
+									<label><input type="checkbox" id="img4"> 2025 True Color</label>
+									<label><input type="checkbox" id="img5"> Change 2017-2025</label>
+									<button id="swipeBtn">Toggle to Compare</button>
+								</div>
+								
+								<h2>About This Analysis</h2>
+								<p>This interactive map displays vegetation indices derived from satellite imagery. NDVI values range from -1 to 1, where higher values indicate denser vegetation. Use the checkboxes to toggle between different imagery layers and the Compare button to activate the side-by-side swipe feature.</p>
+								
+								<h3>Key Features:</h3>
+								<ul>
+									<li><strong>NDVI (2017 & 2025):</strong> Normalized Difference Vegetation Index showing vegetation health and density</li>
+									<li><strong>True Color:</strong> Natural color imagery for reference</li>
+									<li><strong>Change Detection:</strong> Visualization of vegetation change over 8 years</li>
+									<li><strong>Side-by-Side Compare:</strong> Drag the slider to compare two layers directly</li>
+								</ul>
 							</section>
 
 					</div>
@@ -120,6 +188,80 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			
+			<!-- Leaflet JS -->
+			<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+			<!-- Side-by-side plugin -->
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-side-by-side/2.0.0/leaflet-side-by-side.min.js"></script>
+
+			<!-- Initialize Map -->
+			<script>
+				// --- Map setup ---
+				const map = L.map('map').setView([-2.95, 25.9], 10);
+
+				L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+					attribution: '&copy; Google Satellite'
+				}).addTo(map);
+				
+				// --- Bounds from your coordinates ---
+				const bounds = [
+					[-3.088946936, 25.749668630], // SW
+					[-2.811098019, 26.103515021]  // NE
+				];
+
+				// --- Image overlays (replace with your files) ---
+				const img1 = L.imageOverlay('images/congo_NDVI_2017.png', bounds, { opacity: 0.7 }).addTo(map);
+				
+				const img2 = L.imageOverlay('images/congo_RGB_2017.png', bounds, { opacity: 0.7 }).addTo(map);
+				const img3 = L.imageOverlay('images/congo_NDVI_2025.png', bounds, { opacity: 0.7 }).addTo(map);
+
+				const img4 = L.imageOverlay('images/congo_RGB_2025.png', bounds, { opacity: 0.7 }).addTo(map);
+				const img5 = L.imageOverlay('images/congo_change_17-25.png', bounds, { opacity: 0.7 }).addTo(map);
+
+				map.fitBounds(bounds);
+
+				// --- Toggle visibility ---
+				document.getElementById('img1').addEventListener('change', (e) => {
+					if (e.target.checked) map.addLayer(img1);
+					else map.removeLayer(img1);
+				});
+
+				document.getElementById('img2').addEventListener('change', (e) => {
+					if (e.target.checked) map.addLayer(img2);
+					else map.removeLayer(img2);
+				});
+
+				document.getElementById('img3').addEventListener('change', (e) => {
+					if (e.target.checked) map.addLayer(img3);
+					else map.removeLayer(img3);
+				});
+
+				document.getElementById('img4').addEventListener('change', (e) => {
+					if (e.target.checked) map.addLayer(img4);
+					else map.removeLayer(img4);
+				});
+				
+				document.getElementById('img5').addEventListener('change', (e) => {
+					if (e.target.checked) map.addLayer(img5);
+					else map.removeLayer(img5);
+				});
+
+				// --- Swipe compare ---
+				let sideBySide = null;
+				let swipeEnabled = false;
+
+				document.getElementById('swipeBtn').addEventListener('click', () => {
+					if (!swipeEnabled) {
+						sideBySide = L.control.sideBySide(img1, img3).addTo(map);
+						swipeEnabled = true;
+					} else {
+						map.removeControl(sideBySide);
+						sideBySide = null;
+						swipeEnabled = false;
+					}
+				});
+			</script>
 
 	</body>
 </html>
